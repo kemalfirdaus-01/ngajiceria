@@ -199,7 +199,7 @@ nav a.aktif{color:var(--tinta);background:var(--langit)}
     <button type="button" class="ps" id="bareng">Belajar Bareng</button>
     <span id="info-suara" class="info-suara" aria-live="polite"></span>
   </div>
-  <div class="catatan ajak"><span><b>Coba gratis, tanpa daftar.</b> Pilih halaman, lalu mainkan bersama ananda. Suara Ustadz dan Ustadzah adalah rekaman asli pengajar. Setelah mencoba, mohon isi survei singkat (1 menit).</span><button type="button" class="btn-sv" data-buka-survei="atas">Isi survei 1 menit</button><small>Kami mencatat tombol yang dipakai (tanpa nama atau nomor HP) untuk memperbaiki aplikasi.</small></div>
+  <div class="catatan ajak"><span><b>Coba gratis, tanpa daftar.</b> Pilih halaman, lalu mainkan bersama ananda. Suara Ustadz dan Ustadzah adalah rekaman asli pengajar. Setelah mencoba, mohon isi survei singkat (1 menit).</span><button type="button" class="btn-sv" data-buka-survei="atas">Mulai Daftar</button><small>Kami mencatat tombol yang dipakai (tanpa nama atau nomor HP) untuk memperbaiki aplikasi.</small></div>
 
   <!-- PETA BELAJAR -->
   <section class="hal" id="hal-peta">
@@ -314,7 +314,7 @@ nav a.aktif{color:var(--tinta);background:var(--langit)}
       <div class="hrg">Rp399rb <small>/ tahun, setara Rp33rb/bulan, hemat 32%</small></div>
       <ul><li>Isi paket Bulanan selama 12 bulan sampai wisuda Juz 30</li><li>Termasuk 2–3 materi baru tiap bulan</li></ul>
     </div>
-    <button type="button" class="btn-sv" data-buka-survei="paket" style="align-self:stretch">Paket mana yang Ayah/Bunda pilih? Isi survei</button>
+    <button type="button" class="btn-sv" data-buka-survei="paket" style="align-self:stretch">Mulai Daftar</button>
   </section>
 
   <!-- MATERI BULANAN -->
@@ -601,7 +601,7 @@ nav a.aktif{color:var(--tinta);background:var(--langit)}
   const selesai = (pesan) => {
     konfeti(); nada([523,659,784,1047],0.14);
     const d = document.createElement("div");
-    d.innerHTML = `<h2 style="font-size:28px;margin:6px 0">${pesan}</h2><div class="baris"><button class="tombol t-ungu" id="lagi">Main lagi</button><button class="tombol t-hijau" data-buka-survei="selesai">Isi survei</button></div>`;
+    d.innerHTML = `<h2 style="font-size:28px;margin:6px 0">${pesan}</h2><div class="baris"><button class="tombol t-ungu" id="lagi">Main lagi</button><button class="tombol t-hijau" data-buka-survei="selesai">Mulai Daftar</button></div>`;
     arena.querySelectorAll(":scope > :not(.kembali)").forEach(e => e.remove());
     arena.appendChild(d);
     document.getElementById("lagi").addEventListener("click", tutupArena);
@@ -927,15 +927,15 @@ nav a.aktif{color:var(--tinta);background:var(--langit)}
 <div class="kartu-ajak" id="kartu-ajak" hidden role="dialog" aria-label="Ajakan survei">
   <b>Ayah/Bunda, bagaimana kesannya?</b>
   <span>Bantu kami 1 menit lewat survei singkat. Jawaban Ayah/Bunda menentukan materi berikutnya.</span>
-  <div class="baris-aj"><button type="button" class="btn-sv" data-buka-survei="kartu">Isi survei</button><button type="button" class="nanti" id="nanti">Nanti saja</button></div>
+  <div class="baris-aj"><button type="button" class="btn-sv" data-buka-survei="kartu">Mulai Daftar</button><button type="button" class="nanti" id="nanti">Nanti saja</button></div>
 </div>
 
 <div class="sv" id="survei" hidden role="dialog" aria-modal="true" aria-labelledby="sv-judul">
   <div class="isi-sv">
     <button type="button" class="tutup-sv" id="tutup-sv">← Kembali ke aplikasi</button>
     <div id="sv-langkah1" style="display:flex;flex-direction:column;gap:12px">
-      <h2 id="sv-judul">Survei singkat Ngaji Ceria</h2>
-      <p class="lead">10 pertanyaan, sekitar 1 menit. Jawab sejujurnya, termasuk kalau kurang suka. Itu yang paling membantu kami.</p>
+      <h2 id="sv-judul">Mulai Daftar</h2>
+      <p class="lead" style="background:#fff;border-radius:18px;padding:14px 16px;color:var(--tinta);box-shadow:0 3px 0 var(--garis)">Aplikasi ini masih dalam uji coba gratis. Jika Ayah/Bunda ingin versi yang lebih lengkap, silakan isi survei untuk membantu kami dalam pengembangan. Jawab sejujurnya ya, karena saran dan kritik dari Ayah/Bunda sangat berharga bagi kami untuk meng-upgrade aplikasi ini. Terima kasih ☺️🙏🏻<br><b>Jazakumullah khairan.</b></p>
       <form id="sv-form" novalidate style="display:flex;flex-direction:column;gap:12px">
         <fieldset><legend>1. Usia ananda</legend><div class="opsi" data-q>
           <label><input type="radio" name="q1" value="<4 th"><span>Di bawah 4 th</span></label>
