@@ -921,6 +921,12 @@ nav a.aktif{color:var(--tinta);background:var(--langit)}
 .sv .besar{width:100%;border-radius:16px;padding:14px;font:800 1.15rem var(--f-judul);background:var(--daun);color:#fff;box-shadow:0 4px 0 #1F8A50}
 .sv .besar[aria-disabled=true]{background:#9DBFAE;box-shadow:none}
 .sv .tutup-sv{align-self:flex-start;font-weight:800;color:var(--redup);font-size:15px}
+.rating{margin:10px 0 14px;text-align:center}
+.rating p{margin:0 0 6px;font:800 1.15rem var(--f-judul)}
+.rating [data-bintang]{font-size:42px;line-height:1;padding:2px 4px;color:#D5DEE8;background:none}
+.rating [data-bintang].on{color:#FFB800}
+.rating:not([data-sudah]) [role=group]:hover [data-bintang]{color:#FFB800}
+.rating:not([data-sudah]) [data-bintang]:hover ~ [data-bintang]{color:#D5DEE8}
 .sv .selesai{background:#fff;border-radius:18px;padding:20px 16px;text-align:center;display:flex;flex-direction:column;gap:10px;box-shadow:0 3px 0 var(--garis)}
 </style>
 
@@ -1086,7 +1092,25 @@ nav a.aktif{color:var(--tinta);background:var(--langit)}
   };
   window.addEventListener("nc-selesai", (e) => {
     catat("sesi_selesai", game + " · " + e.detail + " · bintang " + ((+(elBintang && elBintang.textContent) || 0) - bintangAwal));
-    setTimeout(() => ajak("selesai " + game), 1500); // beri waktu konfeti dulu
+    // rating 1 klik di layar selesai; kartu ajakan survei muncul setelah rating (atau 8 detik)
+    const lagi = document.getElementById("lagi"), layar = lagi && lagi.closest(".baris") && lagi.closest(".baris").parentElement;
+    let ajakan = setTimeout(() => ajak("selesai " + game), 8000);
+    if (!layar) return;
+    const r = document.createElement("div");
+    r.className = "rating";
+    r.innerHTML = '<p>Ananda suka permainan ini?</p><div role="group" aria-label="Beri bintang">' +
+      [1, 2, 3, 4, 5].map((n) => `<button type="button" data-bintang="${n}" aria-label="${n} bintang">★</button>`).join("") + "</div>";
+    layar.insertBefore(r, layar.querySelector(".baris"));
+    r.addEventListener("click", (ev) => {
+      const b = ev.target.closest("[data-bintang]");
+      if (!b || r.dataset.sudah) return;
+      const n = +b.dataset.bintang;
+      r.dataset.sudah = "1";
+      r.querySelectorAll("[data-bintang]").forEach((x) => x.classList.toggle("on", +x.dataset.bintang <= n));
+      r.querySelector("p").textContent = "Terima kasih! 🙏";
+      catat("rating", game + " · " + n);
+      clearTimeout(ajakan); ajakan = setTimeout(() => ajak("selesai " + game), 1200);
+    });
   });
   setTimeout(() => { if (!ajakWaktu) { ajakWaktu = true; ajak("150 detik"); } }, 150000);
   document.getElementById("nanti").addEventListener("click", () => { kartu.hidden = true; });
