@@ -900,6 +900,9 @@ nav a.aktif{color:var(--tinta);background:var(--langit)}
 .kartu-ajak b{font-family:var(--f-judul);font-size:19px}
 .kartu-ajak .baris-aj{display:flex;gap:8px;align-items:center}
 .kartu-ajak .nanti{color:var(--redup);font-weight:800;font-size:15px;padding:8px}
+.sv-melayang{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:calc(92px + env(safe-area-inset-bottom,0px));z-index:7;background:var(--daun);color:#fff;border-radius:999px;padding:10px 16px;font:800 16px var(--f-judul);box-shadow:0 4px 0 #1F8A50,0 8px 20px rgba(29,53,87,.25);animation:sv-denyut 2.4s ease-in-out infinite}
+@keyframes sv-denyut{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+@media (prefers-reduced-motion:reduce){.sv-melayang{animation:none}}
 .sv{position:fixed;inset:0;background:var(--langit);z-index:20;overflow-y:auto;-webkit-overflow-scrolling:touch;
   padding:16px max(16px,env(safe-area-inset-right,0px)) 40px max(16px,env(safe-area-inset-left,0px))}
 .sv .isi-sv{max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
@@ -929,6 +932,8 @@ nav a.aktif{color:var(--tinta);background:var(--langit)}
 .rating:not([data-sudah]) [data-bintang]:hover ~ [data-bintang]{color:#D5DEE8}
 .sv .selesai{background:#fff;border-radius:18px;padding:20px 16px;text-align:center;display:flex;flex-direction:column;gap:10px;box-shadow:0 3px 0 var(--garis)}
 </style>
+
+<button type="button" class="sv-melayang" id="sv-melayang" data-buka-survei="melayang">📝 Survei 1 menit</button>
 
 <div class="kartu-ajak" id="kartu-ajak" hidden role="dialog" aria-label="Ajakan survei">
   <b>Ayah/Bunda, bagaimana kesannya?</b>
@@ -1118,6 +1123,11 @@ nav a.aktif{color:var(--tinta);background:var(--langit)}
   // ===== survei =====
   const sv = document.getElementById("survei"), form = document.getElementById("sv-form");
   const L1 = document.getElementById("sv-langkah1"), L2 = document.getElementById("sv-langkah2"), L3 = document.getElementById("sv-langkah3");
+  // tombol survei melayang: selalu terlihat sampai kontak dikirim (dulu ajakan baru muncul setelah 1 sesi main / 150 detik)
+  const melayang = document.getElementById("sv-melayang");
+  const cekMelayang = () => { melayang.hidden = !!ls.get("ncKontakKirim") || !sv.hidden; };
+  new MutationObserver(cekMelayang).observe(sv, { attributes: true, attributeFilter: ["hidden"] });
+  cekMelayang();
   const tampil = (n) => { L1.hidden = n !== 1; L2.hidden = n !== 2; L3.hidden = n !== 3; L1.style.display = n === 1 ? "flex" : "none"; L2.style.display = n === 2 ? "flex" : "none"; sv.scrollTop = 0; };
   const bukaSurvei = (dari) => {
     kartu.hidden = true; sv.hidden = false; document.body.style.overflow = "hidden";
